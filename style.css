@@ -694,84 +694,65 @@ footer{
 }
 
 @media (max-width: 768px) {
-
   /* الصفحة عامة */
   body {
     overflow-x: hidden;
   }
 
+  /* الخلفية - تقليل الارتفاع عشان متبقاش طويلة زيادة */
+  .hero-bg {
+    height: 300px; /* تحديد ارتفاع ثابت للموبايل */
+    background-attachment: scroll; /* أفضل للموبايل من الـ fixed */
+  }
+
+  /* منطقة الصورة - إلغاء الـ absolute عشان الكلام ينزل تحتها */
+  .profile-image-area {
+    position: relative; /* غيرناه من absolute لـ relative */
+    height: 200px; 
+    top: 0;
+  }
+
   /* الكرت الرئيسي */
   .profile-card {
-    width: 95%;
-    padding: 20px;
+    width: 92%;
+    margin: -50px auto 20px auto; /* رفع الكرت شوية فوق الخلفية بشكل جمالي */
     flex-direction: column;
+    padding: 15px;
     min-height: auto;
-    margin-top: 20px;
+    z-index: 10;
   }
 
-  /* النص */
+  /* ضبط النصوص عشان متداخلش */
+  .profile-info {
+    text-align: center;
+    margin-top: 10px;
+  }
+
   .profile-info h1 {
-    font-size: 28px;
+    font-size: 24px;
+    line-height: 1.2;
+    margin-bottom: 10px;
   }
 
-  /* stats boxes */
-  .stats-row {
+  /* المربعات (Stats & Games & Social) */
+  .stats-row, .mygame-row, #social .grid {
+    display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px; /* إضافة مسافة بين المربعات عشان ملزقينش في بعض */
   }
 
-  .stat-box {
-    width: 90%;
-  }
-
-  /* about box */
-  .about-box {
-    width: 95%;
-    padding: 10px;
-  }
-
-  /* games */
-  .mygame-row {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .mygame-box {
-    min-width: 90%;
-    width: 90%;
-  }
-
-  /* social */
-  #social {
-    padding: 40px 10px;
-  }
-
-  #social .grid {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  #social .card {
-    width: 90%;
+  .stat-box, .about-box, .mygame-box, #social .card {
+    width: 95% !important;
+    margin: 5px 0;
+    box-sizing: border-box; /* بيضمن إن الـ padding ميخربش العرض */
   }
 
   /* العناوين */
-  .main-games-title {
-    padding-left: 0;
+  .main-games-title, .games-title {
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 15px;
     text-align: center;
-    font-size: 22px;
   }
-    .hero-bg{
-    background-size: cover;
-    background-position: center;
-    height: 100%;
-    width: 100%;
-    filter: brightness(0.4) blur(2px);
-}
-    .profile-image-area{
-    height: 250px;
-    width: 100%;
-    position: absolute;
-    top: 0;
-}
 }
