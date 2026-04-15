@@ -697,22 +697,22 @@ footer{
 
   /* 1. تقليل مساحة الخلفية العلوية لأقصى حد */
   .hero-bg {
-    height: 100%;
-    width: 100%;
+    height: 50%;
+    width: 50%;
     background-size: cover;
     background-position: center;
     filter: brightness(0.4) blur(2px);
   }
 
   .profile-image-area {
-    height: 220px; /* شكل محترم بدل القص */
+    height: 300px; /* شكل محترم بدل القص */
     width: 100%;
     position: relative;
   }
 
   /* 2. شد الكرت لفوق لتقليل الفراغ مع البار */
   .profile-card {
-    width: 50%;
+    width: 90%;
     margin: 10px auto;
     padding: 20px;
     min-height: auto;
