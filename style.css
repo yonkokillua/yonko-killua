@@ -69,45 +69,37 @@ nav ul li a:hover{
     color:#ff0033;
 }
 @media (max-width: 768px) {
-    /* البار الأساسي */
+    /* 1. ضبط البار ليصبح صفاً واحداً */
     nav {
         display: flex !important;
-        flex-direction: row !important; /* خليهم في سطر واحد مش فوق بعض */
-        justify-content: space-between !important; /* الاسم شمال والروابط يمين */
-        align-items: center !important;
+        flex-direction: row !important;      /* صف واحد */
+        justify-content: space-between !important; /* الاسم يسار والأقسام يمين */
+        align-items: center !important;      /* محاذاة العناصر في المنتصف طولياً */
         padding: 10px 15px !important;
-        height: auto !important;
+        width: 100% !important;
+        box-sizing: border-box;
     }
 
-    /* الاسم (اللوجو) */
+    /* 2. تصغير اللوجو (الاسم) */
     .logo {
-        font-size: 16px !important; /* خط صغير للاسم */
-        font-weight: bold;
+        font-size: 16px !important;          /* خط صغير */
         margin: 0 !important;
-        white-space: nowrap; /* يمنع الاسم ينزل سطر جديد */
+        white-space: nowrap;                 /* منع نزول الاسم لسطر جديد */
     }
 
-    /* قائمة الأقسام */
+    /* 3. تصغير الأقسام (القائمة) */
     nav ul {
         display: flex !important;
-        flex-direction: row !important; /* الروابط جنب بعضها */
-        gap: 10px !important; /* مسافة بسيطة بين الروابط */
+        flex-direction: row !important;
+        gap: 10px !important;                /* مسافة صغيرة بين الأقسام */
         margin: 0 !important;
         padding: 0 !important;
-        list-style: none !important;
     }
 
-    /* روابط الأقسام */
+    /* 4. تصغير خط الأقسام */
     nav ul li a {
-        font-size: 12px !important; /* خط أصغر للأقسام */
-        text-decoration: none;
-        color: #ccc; /* لون هادي شوية */
-        white-space: nowrap;
-    }
-
-    /* إخفاء أي زرار منيو لو كنت ضفته */
-    .menu-toggle {
-        display: none !important;
+        font-size: 12px !important;          /* خط أصغر من الاسم */
+        padding: 0 !important;
     }
 }
 /* =========================
