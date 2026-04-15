@@ -694,42 +694,47 @@ footer{
 }
 
 @media (max-width: 768px) {
-  
-  /* تقليل المساحة فوق الكرت */
+
+  /* 1. تقليل مساحة الخلفية العلوية لأقصى حد */
   .hero-bg {
-    height: 30px; /* صغرنا ارتفاع الخلفية */
+    height: 120px !important; /* تقليل الارتفاع جداً */
     min-height: auto;
   }
 
   .profile-image-area {
-    height: 150px; /* صغرنا منطقة الصورة */
-    position: relative;
-    top: 0;
-  }
-
-  /* ضبط الكرت والمسافة اللي فوقه */
-  .profile-card {
-    width: 92%;
-    margin: -300px auto 10px auto; /* الـ -40px بتسحب الكرت لفوق عشان يغطي الفراغ */
-    padding: 15px;
-  }
-
-  /* تقليل المساحة تحت الكرت (الـ Stats) */
-  .games-section, #social, .stats-row {
-    padding-top: 10px !important;   /* تقليل الفراغ العلوي */
-    padding-bottom: 10px !important; /* تقليل الفراغ السفلي */
-    margin-top: 0;
+    height: 100px !important; 
     margin-bottom: 0;
   }
 
-  /* المربعات نفسها نقلل الهوامش بتاعتها */
-  .stat-box, .about-box, .game-card {
-    margin: 5px auto !important;
+  /* 2. شد الكرت لفوق لتقليل الفراغ مع البار */
+  .profile-card {
+    width: 95%;
+    margin: -60px auto 10px auto !important; /* سحب الكرت لفوق أكتر */
+    padding: 15px !important;
+    min-height: auto !important; /* عشان ميبقاش طويل عالفاضي */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  /* تقليل مساحة الـ Padding في الـ Boxes */
-  .about-box {
-    padding: 15px !important;
+  /* 3. إلغاء أي طول ثابت للصور أو العناصر داخل الكرت */
+  .profile-info {
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center;
+  }
+
+  /* 4. إزالة الفراغات القاتلة في الأقسام اللي تحت الكرت */
+  .games-section, .stats-row, #social {
+    padding-top: 0 !important;
+    margin-top: 5px !important;
+  }
+
+  /* 5. لو الكرت لسه واخد شكل "مربع طويل"، ده بيصفر الطول الزايد */
+  .stat-box, .about-box {
+    height: auto !important; 
+    min-height: 50px !important;
+    margin: 8px auto !important;
   }
 }
 
