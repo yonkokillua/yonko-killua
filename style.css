@@ -761,4 +761,11 @@ footer{
     text-align: center;
     font-size: 22px;
   }
+    .hero-bg{
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    filter: brightness(0.4) blur(2px);
+}
 }
