@@ -710,7 +710,7 @@ footer{
   /* ضبط الكرت والمسافة اللي فوقه */
   .profile-card {
     width: 92%;
-    margin: -40px auto 10px auto; /* الـ -40px بتسحب الكرت لفوق عشان يغطي الفراغ */
+    margin: -300px auto 10px auto; /* الـ -40px بتسحب الكرت لفوق عشان يغطي الفراغ */
     padding: 15px;
   }
 
