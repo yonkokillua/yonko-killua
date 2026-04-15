@@ -308,36 +308,59 @@ nav ul li a:hover{
    MOBILE
 ========================= */
 
-@media (max-width:768px){
+@media (max-width: 768px) {
 
-.profile-card{
-    
-    flex-direction:column;
-    text-align:center;
-    padding:30px;
+    .profile-card {
+        /* تصفير القيم الكبيرة */
+        width: 90% !important; /* الكرت ياخد عرض الشاشة */
+        min-height: auto !important; /* خليه يلم على قد المحتوى */
+        padding: 40px 20px !important; /* مسافات داخلية معقولة */
+        margin: 20px auto !important; /* توسيط الكرت */
+        
+        flex-direction: column !important; /* العناصر تحت بعضها */
+        gap: 20px !important;
+        
+        /* تقليل التوهج عشان أداء الموبايل */
+        animation: borderGlow 6s infinite ease-in-out;
+    }
+
+    /* منطقة الصورة */
+    .profile-image-area {
+        position: relative !important; /* عشان متغطيش على الكلام */
+        width: 180px !important; /* حجم مناسب للموبايل */
+        height: 180px !important;
+        margin: 0 auto !important; /* توسيط الصورة */
+        border-radius: 50%;
+        order: -1; /* يخلي الصورة تطلع فوق والاسم تحتها */
+    }
+
+    .hero-bg {
+        background-size: cover !important;
+        filter: brightness(0.6) blur(0px) !important; /* وضح الصورة شوية في الموبايل */
+        opacity: 0.8 !important;
+    }
+
+    /* النصوص */
+    .profile-info {
+        padding: 0 !important;
+    }
+
+    .profile-info h1 {
+        font-size: 32px !important; /* تصغير الخط */
+        margin-top: 10px;
+    }
+
+    .subtitle {
+        font-size: 14px !important;
+        display: block;
+        margin-top: 5px;
+    }
+
+    /* إخفاء الجزيئات (Particles) في الموبايل لتحسين الأداء (اختياري) */
+    #card-particles {
+        opacity: 0.5;
+    }
 }
-
-.profile-info{
-    text-align:center;
-}
-
-.profile-info h1{
-    font-size:35px;
-}
-
-.profile-image-area{
-    width:380px;
-    height: 380px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    position:relative;
-    overflow: hidden;
-    flex-shrink:0;
-}
-
-}
-
 /* =========================
    BUTTONS
 ========================= */
