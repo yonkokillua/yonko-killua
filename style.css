@@ -768,4 +768,10 @@ footer{
     width: 100%;
     filter: brightness(0.4) blur(2px);
 }
+    .profile-image-area{
+    height: 250px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+}
 }
