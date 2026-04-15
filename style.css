@@ -697,24 +697,26 @@ footer{
 
   /* 1. تقليل مساحة الخلفية العلوية لأقصى حد */
   .hero-bg {
-    height: 120px !important; /* تقليل الارتفاع جداً */
-    min-height: auto;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.4) blur(2px);
   }
 
   .profile-image-area {
-    height: 100px !important; 
-    margin-bottom: 0;
+    height: 220px; /* شكل محترم بدل القص */
+    width: 100%;
+    position: relative;
   }
 
   /* 2. شد الكرت لفوق لتقليل الفراغ مع البار */
   .profile-card {
     width: 95%;
-    margin: -60px auto 10px auto !important; /* سحب الكرت لفوق أكتر */
-    padding: 15px !important;
-    min-height: auto !important; /* عشان ميبقاش طويل عالفاضي */
-    display: flex;
+    margin: 10px auto;
+    padding: 20px;
+    min-height: auto;
     flex-direction: column;
-    align-items: center;
   }
 
   /* 3. إلغاء أي طول ثابت للصور أو العناصر داخل الكرت */
