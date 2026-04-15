@@ -706,15 +706,15 @@ footer{
 
   .profile-image-area {
     height: 300px; /* شكل محترم بدل القص */
-    width: 100%;
+    width: 200%;
     position: relative;
   }
 
   /* 2. شد الكرت لفوق لتقليل الفراغ مع البار */
   .profile-card {
-    width: 90%;
+    width: 200%;
     margin: 10px auto;
-    padding: 20px;
+    padding: 10px;
     min-height: auto;
     flex-direction: column;
   }
@@ -723,7 +723,7 @@ footer{
   .profile-info {
     margin: 0 !important;
     padding: 0 !important;
-    text-align: center;
+    
   }
 
   /* 4. إزالة الفراغات القاتلة في الأقسام اللي تحت الكرت */
