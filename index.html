@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Yonko Killua</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<!-- AOS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Particles -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+
+<body>
+
+<!-- BACKGROUND EFFECTS -->
+<div id="particles-js"></div>
+
+
+<!-- NAV -->
+<nav>
+    <h2 class="logo">⚡ Yonko Killua</h2>
+
+    <ul>
+        <li><a href="#social">Social</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="profile-card">
+        <canvas id="card-particles"></canvas>
+        <div class="profile-image-area">
+            <div class="hero-bg"></div> 
+            <div class="scan-layer"></div>
+        </div>
+
+        <div class="profile-info">
+            <h1>YONKO KILLUA</h1>
+            <p class="subtitle">Gaming • Streaming • Programmer</p>
+            <button onclick="scrollToSection('social')">Enter Hub</button>
+        </div>
+
+    </div>
+</header>
+
+<div class="stats-row">
+
+    <div class="stat-box youtube">
+        <i class="fab fa-youtube"></i>
+        <h3 id="youtubeSubs">693</h3>
+        <p>YouTube</p>
+        
+    </div>
+
+    <div class="stat-box tiktok">
+        <i class="fab fa-tiktok"></i>
+        <h3>461</h3>
+        <p>TikTok</p>
+    </div>
+
+    <div class="stat-box twitch">
+        <i class="fab fa-twitch"></i>
+        <h3>112</h3>
+        <p>Twitch</p>
+    </div>
+
+    <div class="stat-box discord">
+        <i class="fab fa-discord"></i>
+        <h3>9</h3>
+        <p>Discord</p>
+    </div>
+
+</div>
+
+<!--معلومات-->
+
+
+<div class="about-box">
+    <div class="about-overlay">
+        <h2 class="about-title">Who is Yonko Killua?</h2>
+        <p>
+Hello, I'm Yonko Killua. I love playing games, eating, and programming. I enjoy completing games, especially horror games, and playing with friends. I also absolutely adore cakes. (That's not a particularly useful detail, but I'll write it anyway.) I also enjoy developing programming skills, such as creating web pages, graphic designs, or game designs.
+
+(Thank you for reading this ^-^)
+        </p>
+    </div>
+</div>
+
+<!--main games-->
+<h3 class="main-games-title">Main Games</h3>
+
+<div class="mygame-row">
+    
+    
+    <div class="mygame-box">
+        <div class="gameblack">
+        <img src="image/gen.jpg" width="40">
+        <h3>Genshin Impact</h3>
+        <p>An open world with some quests, stories, and explorations</p>
+    </div>
+    </div>
+
+    <div class="mygame-box">
+        <div class="gameblack">
+        <img src="image/mb.jpg" width="40">
+        <h3>Mobile Legends</h3>
+        <p>5 vs 5 is a team-based game focused on destroying towers.</p>
+    </div>
+    </div>
+
+    <div class="mygame-box">
+        <div class="gameblack">
+        <img src="image/pub.jpg" width="40">
+        <h3>PUBG Mobile</h3>
+        <p>It's a shooter game, and it depends on who can survive.</p>
+    </div>
+    </div>
+        
+
+</div>
+
+<!-- SOCIAL -->
+<section id="social">
+    <h3 data-aos="fade-right"> Social Links</h3>
+
+    <div class="grid">
+
+        <div class="card" data-aos="fade-up">
+            <img src="image/yut.jpg" class="social-img">
+            <h3>YouTube</h3>
+            <button onclick="openLink('https://www.youtube.com/@yonko_killua')">Open</button>
+        </div>
+
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <img src="image/tik.jpg" class="social-img">
+            <h3>TikTok</h3>
+            <button onclick="openLink('https://www.tiktok.com/@yonko_killua?_r=1&_t=ZS-95ZHCHdnyNz')">Open</button>
+        </div>
+
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+            <img src="image/twi.jpg" class="social-img">
+            <h3>Twitch</h3>
+            <button onclick="openLink('https://www.twitch.tv/yonko_killua')">Open</button>
+        </div>
+
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+            <img src="image/dis.jpg" class="social-img">
+            <h3>Discord</h3>
+            <button onclick="openLink('https://discord.gg/rdf79TpC')">Open</button>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    © 2026 Yonko Killua | Gaming Hub
+</footer>
+
+<script src="script.js"></script>
+
+<!-- AOS INIT -->
+<script>
+AOS.init({
+    duration: 900,
+    once: true
+});
+</script>
+
+</body>
+</html>
