@@ -68,7 +68,25 @@ nav ul li a{
 nav ul li a:hover{
     color:#ff0033;
 }
+@media (max-width: 768px){
+    nav {
+    flex-direction: column;
+    padding: 10px 15px;
+    gap: 10px;
+}
 
+nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 18px;
+    text-align: center;
+}
+}
 /* =========================
    HERO SECTION
 ========================= */
