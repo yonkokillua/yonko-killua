@@ -692,3 +692,73 @@ footer{
     opacity:1;
     visibility:visible;
 }
+
+@media (max-width: 768px) {
+
+  /* الصفحة عامة */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* الكرت الرئيسي */
+  .profile-card {
+    width: 95%;
+    padding: 20px;
+    flex-direction: column;
+    min-height: auto;
+    margin-top: 20px;
+  }
+
+  /* النص */
+  .profile-info h1 {
+    font-size: 28px;
+  }
+
+  /* stats boxes */
+  .stats-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-box {
+    width: 90%;
+  }
+
+  /* about box */
+  .about-box {
+    width: 95%;
+    padding: 10px;
+  }
+
+  /* games */
+  .mygame-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mygame-box {
+    min-width: 90%;
+    width: 90%;
+  }
+
+  /* social */
+  #social {
+    padding: 40px 10px;
+  }
+
+  #social .grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #social .card {
+    width: 90%;
+  }
+
+  /* العناوين */
+  .main-games-title {
+    padding-left: 0;
+    text-align: center;
+    font-size: 22px;
+  }
+}
