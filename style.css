@@ -68,39 +68,48 @@ nav ul li a{
 nav ul li a:hover{
     color:#ff0033;
 }
-@media (max-width: 768px) { /* القوس ده كان ناقص */
-
+@media (max-width: 768px) {
+    /* البار الأساسي */
     nav {
-        flex-direction: column;
-        padding: 10px;
-        gap: 10px;
-        text-align: center;
-        width: 100%;
-        box-sizing: border-box;
+        display: flex !important;
+        flex-direction: row !important; /* خليهم في سطر واحد مش فوق بعض */
+        justify-content: space-between !important; /* الاسم شمال والروابط يمين */
+        align-items: center !important;
+        padding: 10px 15px !important;
+        height: auto !important;
     }
 
-    nav ul {
-        display: flex; /* تأكد إن الـ flex مفعل */
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-        padding: 0;
-        margin: 0;
-        list-style: none;
-    }
-
-    nav ul li a {
-        font-size: 14px; /* تصغير حجم الخط شوية للموبايل */
-    }
-
+    /* الاسم (اللوجو) */
     .logo {
-        font-size: 20px;
-        width: 100%;
-        margin-bottom: 5px;
+        font-size: 16px !important; /* خط صغير للاسم */
+        font-weight: bold;
+        margin: 0 !important;
+        white-space: nowrap; /* يمنع الاسم ينزل سطر جديد */
     }
-    
-} /* قفلة الميديا كويري */
+
+    /* قائمة الأقسام */
+    nav ul {
+        display: flex !important;
+        flex-direction: row !important; /* الروابط جنب بعضها */
+        gap: 10px !important; /* مسافة بسيطة بين الروابط */
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    /* روابط الأقسام */
+    nav ul li a {
+        font-size: 12px !important; /* خط أصغر للأقسام */
+        text-decoration: none;
+        color: #ccc; /* لون هادي شوية */
+        white-space: nowrap;
+    }
+
+    /* إخفاء أي زرار منيو لو كنت ضفته */
+    .menu-toggle {
+        display: none !important;
+    }
+}
 /* =========================
    HERO SECTION
 ========================= */
