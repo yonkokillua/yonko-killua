@@ -694,65 +694,42 @@ footer{
 }
 
 @media (max-width: 768px) {
-  /* الصفحة عامة */
-  body {
-    overflow-x: hidden;
-  }
-
-  /* الخلفية - تقليل الارتفاع عشان متبقاش طويلة زيادة */
+  
+  /* تقليل المساحة فوق الكرت */
   .hero-bg {
-    height: 300px; /* تحديد ارتفاع ثابت للموبايل */
-    background-attachment: scroll; /* أفضل للموبايل من الـ fixed */
+    height: 180px; /* صغرنا ارتفاع الخلفية */
+    min-height: auto;
   }
 
-  /* منطقة الصورة - إلغاء الـ absolute عشان الكلام ينزل تحتها */
   .profile-image-area {
-    position: relative; /* غيرناه من absolute لـ relative */
-    height: 200px; 
+    height: 150px; /* صغرنا منطقة الصورة */
+    position: relative;
     top: 0;
   }
 
-  /* الكرت الرئيسي */
+  /* ضبط الكرت والمسافة اللي فوقه */
   .profile-card {
     width: 92%;
-    margin: -50px auto 20px auto; /* رفع الكرت شوية فوق الخلفية بشكل جمالي */
-    flex-direction: column;
+    margin: -40px auto 10px auto; /* الـ -40px بتسحب الكرت لفوق عشان يغطي الفراغ */
     padding: 15px;
-    min-height: auto;
-    z-index: 10;
   }
 
-  /* ضبط النصوص عشان متداخلش */
-  .profile-info {
-    text-align: center;
-    margin-top: 10px;
+  /* تقليل المساحة تحت الكرت (الـ Stats) */
+  .games-section, #social, .stats-row {
+    padding-top: 10px !important;   /* تقليل الفراغ العلوي */
+    padding-bottom: 10px !important; /* تقليل الفراغ السفلي */
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
-  .profile-info h1 {
-    font-size: 24px;
-    line-height: 1.2;
-    margin-bottom: 10px;
+  /* المربعات نفسها نقلل الهوامش بتاعتها */
+  .stat-box, .about-box, .game-card {
+    margin: 5px auto !important;
   }
 
-  /* المربعات (Stats & Games & Social) */
-  .stats-row, .mygame-row, #social .grid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px; /* إضافة مسافة بين المربعات عشان ملزقينش في بعض */
-  }
-
-  .stat-box, .about-box, .mygame-box, #social .card {
-    width: 95% !important;
-    margin: 5px 0;
-    box-sizing: border-box; /* بيضمن إن الـ padding ميخربش العرض */
-  }
-
-  /* العناوين */
-  .main-games-title, .games-title {
-    font-size: 20px;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    text-align: center;
+  /* تقليل مساحة الـ Padding في الـ Boxes */
+  .about-box {
+    padding: 15px !important;
   }
 }
+
