@@ -99,55 +99,38 @@ function toggleMenu() {
     }
 }
 
-// ==========================
-// تحميل البيانات عند فتح الصفحة
-// ==========================
-document.addEventListener("DOMContentLoaded", function(){
-
+// 1. عند تحميل الصفحة: شغل التحميل فوراً
+document.addEventListener("DOMContentLoaded", function() {
     loadData();
 
+    // ربط زر الـ Enter بالأنبوت
     const input = document.getElementById("gameInput");
-    if(input){
-        input.addEventListener("keypress", function(e){
-            if(e.key === "Enter"){
+    if (input) {
+        input.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
                 addGame();
             }
         });
     }
 });
 
-
-// ==========================
-// إضافة لعبة
-// ==========================
+// 2. دالة الإضافة
 function addGame() {
-
     const input = document.getElementById("gameInput");
     const requestList = document.getElementById("requestList");
 
     if (!input || !requestList) return;
 
     const value = input.value.trim();
-
-    if (value === "") {
-        alert("اكتب اسم اللعبة الأول!");
-        return;
-    }
+    if (value === "") return;
 
     createItem(value, "requestList");
-
     input.value = "";
-    input.focus();
-
-    saveData(); // 👈 حفظ تلقائي
+    saveData(); // حفظ بعد الإضافة
 }
 
-
-// ==========================
-// إنشاء عنصر
-// ==========================
-function createItem(name, targetId){
-
+// 3. دالة الإنشاء (المسؤولة عن شكل العنصر)
+function createItem(name, targetId) {
     const item = document.createElement("div");
     item.className = "item";
 
@@ -155,7 +138,7 @@ function createItem(name, targetId){
         <span>${name}</span>
         <div class="actions">
             ${targetId === "requestList" 
-                ? '<button onclick="moveToFinished(this)" style="background:#28a745;">✔</button>' 
+                ? `<button onclick="moveToFinished(this)" style="background:#28a745;">✔</button>` 
                 : ''
             }
             <button onclick="deleteItem(this)" style="background:transparent; border:1px solid #ff0033; color:#ff0033;">❌</button>
@@ -165,63 +148,49 @@ function createItem(name, targetId){
     document.getElementById(targetId).appendChild(item);
 }
 
-
-// ==========================
-// نقل لـ Finished
-// ==========================
+// 4. دالة النقل
 function moveToFinished(btn) {
-
     const item = btn.closest(".item");
     const finishedList = document.getElementById("finishedList");
 
     if (item && finishedList) {
-        btn.remove(); // شيل زرار الصح
+        btn.remove(); // حذف زرار الصح
         finishedList.appendChild(item);
-
-        saveData(); // 👈 حفظ تلقائي
+        saveData(); // حفظ بعد النقل
     }
 }
 
-
-// ==========================
-// حذف
-// ==========================
+// 5. دالة الحذف
 function deleteItem(btn) {
-
     const item = btn.closest(".item");
-
     if (item) {
         item.remove();
-        saveData(); // 👈 حفظ تلقائي
+        saveData(); // حفظ بعد الحذف
     }
 }
 
-
-// ==========================
-// حفظ البيانات
-// ==========================
-function saveData(){
-
+// 6. 🔥 دالة الحفظ (تجمع الأسماء وتحولها لنص JSON)
+function saveData() {
     const requestItems = [];
     const finishedItems = [];
 
-    document.querySelectorAll("#requestList .item span").forEach(el=>{
-        requestItems.push(el.textContent);
+    document.querySelectorAll("#requestList .item span").forEach(el => {
+        requestItems.push(el.innerText);
     });
 
-    document.querySelectorAll("#finishedList .item span").forEach(el=>{
-        finishedItems.push(el.textContent);
+    document.querySelectorAll("#finishedList .item span").forEach(el => {
+        finishedItems.push(el.innerText);
     });
 
     localStorage.setItem("requestGames", JSON.stringify(requestItems));
     localStorage.setItem("finishedGames", JSON.stringify(finishedItems));
 }
 
-
-// ==========================
-// تحميل البيانات
-// ==========================
-function loadData(){
+// 7. 🔥 دالة التحميل (بتقرأ البيانات من ذاكرة المتصفح)
+function loadData() {
+    // تنظيف القوائم أولاً عشان ميكررش البيانات
+    document.getElementById("requestList").innerHTML = "";
+    document.getElementById("finishedList").innerHTML = "";
 
     const request = JSON.parse(localStorage.getItem("requestGames")) || [];
     const finished = JSON.parse(localStorage.getItem("finishedGames")) || [];
