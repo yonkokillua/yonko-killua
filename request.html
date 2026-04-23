@@ -56,7 +56,7 @@
 
     <input type="text" id="gameInput" placeholder="اكتب اسم اللعبة">
     <button onclick="addGame()">Add</button>
-    <button onclick="saveData()">Confirm</button>
+    
 
     <div class="boxes">
 
@@ -85,10 +85,7 @@
 
 <!-- AOS INIT -->
 <script>
-    AOS.init({
-    duration: 900,
-    once: true
-});
+   
 function toggleMenu() {
     const menu = document.getElementById("mobileMenu");
     if (menu) {
@@ -99,93 +96,82 @@ function toggleMenu() {
     }
 }
 
-// عند تحميل الصفحة، اسحب البيانات المخزنة
-document.addEventListener("DOMContentLoaded", () => {
-    loadData();
-});
+// دالة الحفظ التلقائي
+function saveData() {
+    try {
+        const requestItems = [];
+        const finishedItems = [];
 
-// دالة الإضافة + حفظ تلقائي
+        document.querySelectorAll("#requestList .item span").forEach(el => {
+            requestItems.push(el.innerText.trim());
+        });
+
+        document.querySelectorAll("#finishedList .item span").forEach(el => {
+            finishedItems.push(el.innerText.trim());
+        });
+
+        localStorage.setItem("requestGames", JSON.stringify(requestItems));
+        localStorage.setItem("finishedGames", JSON.stringify(finishedItems));
+        console.log("✅ تم الحفظ في الذاكرة");
+    } catch (e) {
+        console.error("خطأ أثناء الحفظ:", e);
+    }
+}
+
+// دالة التحميل
+function loadData() {
+    try {
+        const req = JSON.parse(localStorage.getItem("requestGames")) || [];
+        const fin = JSON.parse(localStorage.getItem("finishedGames")) || [];
+
+        document.getElementById("requestList").innerHTML = "";
+        document.getElementById("finishedList").innerHTML = "";
+
+        req.forEach(name => createItem(name, "requestList"));
+        fin.forEach(name => createItem(name, "finishedList"));
+        console.log("📥 تم استرجاع البيانات");
+    } catch (e) {
+        console.log("الذاكرة فارغة حالياً");
+    }
+}
+
+// تعديل بسيط لدالة الإضافة عشان تحفظ
 function addGame() {
     const input = document.getElementById("gameInput");
-    const value = input.value.trim();
+    if (!input || input.value.trim() === "") return;
 
-    if (value === "") return;
-
-    createItem(value, "requestList");
+    createItem(input.value.trim(), "requestList");
     input.value = "";
-    input.focus();
-    
-    saveData(); // 🔥 حفظ فوراً بعد الإضافة
+    saveData(); // حفظ فوراً
 }
 
-// دالة النقل + حفظ تلقائي
-function moveToFinished(btn) {
-    const item = btn.closest(".item");
-    const finishedList = document.getElementById("finishedList");
-
-    if (item && finishedList) {
-        btn.remove(); // شيل زرار الصح
-        finishedList.appendChild(item);
-        saveData(); // 🔥 حفظ فوراً بعد النقل
-    }
-}
-
-// دالة الحذف + حفظ تلقائي
-function deleteItem(btn) {
-    const item = btn.closest(".item");
-    if (item) {
-        item.remove();
-        saveData(); // 🔥 حفظ فوراً بعد الحذف
-    }
-}
-
-// دالة إنشاء العنصر (HTML الداخلي)
 function createItem(name, targetId) {
-    const list = document.getElementById(targetId);
     const item = document.createElement("div");
     item.className = "item";
-
     item.innerHTML = `
         <span>${name}</span>
         <div class="actions">
-            ${targetId === "requestList" 
-                ? '<button onclick="moveToFinished(this)" style="background:#28a745;">✔</button>' 
-                : ''
-            }
-            <button onclick="deleteItem(this)" style="background:transparent; border:1px solid #ff0033; color:#ff0033;">❌</button>
+            ${targetId === "requestList" ? '<button onclick="moveToFinished(this)">✔</button>' : ''}
+            <button onclick="deleteItem(this)">❌</button>
         </div>
     `;
-    list.appendChild(item);
+    document.getElementById(targetId).appendChild(item);
 }
 
-// 🔥 المحرك الأساسي للحفظ (saveData)
-function saveData() {
-    const requestItems = [];
-    const finishedItems = [];
-
-    // نلف على كل الـ spans وناخد النص اللي جواها
-    document.querySelectorAll("#requestList .item span").forEach(el => requestItems.push(el.innerText));
-    document.querySelectorAll("#finishedList .item span").forEach(el => finishedItems.push(el.innerText));
-
-    // تحويل المصفوفات لنص JSON وتخزينها
-    localStorage.setItem("requestGames", JSON.stringify(requestItems));
-    localStorage.setItem("finishedGames", JSON.stringify(finishedItems));
-    
-    console.log("Auto-Saved!"); // عشان تتأكد في الـ Console إن الحفظ شغال
+function moveToFinished(btn) {
+    const item = btn.closest(".item");
+    btn.remove();
+    document.getElementById("finishedList").appendChild(item);
+    saveData();
 }
 
-// دالة التحميل (loadData)
-function loadData() {
-    const request = JSON.parse(localStorage.getItem("requestGames")) || [];
-    const finished = JSON.parse(localStorage.getItem("finishedGames")) || [];
-
-    // تنظيف القوائم قبل التحميل لضمان عدم التكرار
-    document.getElementById("requestList").innerHTML = "";
-    document.getElementById("finishedList").innerHTML = "";
-
-    request.forEach(name => createItem(name, "requestList"));
-    finished.forEach(name => createItem(name, "finishedList"));
+function deleteItem(btn) {
+    btn.closest(".item").remove();
+    saveData();
 }
+
+// تشغيل التحميل أول ما الصفحة تفتح
+window.onload = loadData;
 </script>
 </body>
 </html>
