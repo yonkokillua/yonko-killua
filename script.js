@@ -150,3 +150,31 @@ function animate() {
 
 animate();
 
+function addGame(){
+    const input = document.getElementById("gameInput");
+    const value = input.value.trim();
+
+    if(value === "") return;
+
+    const item = document.createElement("div");
+    item.className = "item";
+
+    item.innerHTML = `
+        <span>${value}</span>
+        <button onclick="moveToFinished(this)">✔</button>
+        <button onclick="this.parentElement.remove()">❌</button>
+    `;
+
+    document.getElementById("requestList").appendChild(item);
+
+    input.value = "";
+}
+
+function moveToFinished(btn){
+    const item = btn.parentElement;
+
+    // نشيل الزرار بعد النقل
+    btn.remove();
+
+    document.getElementById("finishedList").appendChild(item);
+}
