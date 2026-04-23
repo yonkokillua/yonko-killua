@@ -99,38 +99,49 @@ function toggleMenu() {
     }
 }
 
-// 1. عند تحميل الصفحة: شغل التحميل فوراً
-document.addEventListener("DOMContentLoaded", function() {
+// عند تحميل الصفحة، اسحب البيانات المخزنة
+document.addEventListener("DOMContentLoaded", () => {
     loadData();
-
-    // ربط زر الـ Enter بالأنبوت
-    const input = document.getElementById("gameInput");
-    if (input) {
-        input.addEventListener("keypress", function(e) {
-            if (e.key === "Enter") {
-                addGame();
-            }
-        });
-    }
 });
 
-// 2. دالة الإضافة
+// دالة الإضافة + حفظ تلقائي
 function addGame() {
     const input = document.getElementById("gameInput");
-    const requestList = document.getElementById("requestList");
-
-    if (!input || !requestList) return;
-
     const value = input.value.trim();
+
     if (value === "") return;
 
     createItem(value, "requestList");
     input.value = "";
-    saveData(); // حفظ بعد الإضافة
+    input.focus();
+    
+    saveData(); // 🔥 حفظ فوراً بعد الإضافة
 }
 
-// 3. دالة الإنشاء (المسؤولة عن شكل العنصر)
+// دالة النقل + حفظ تلقائي
+function moveToFinished(btn) {
+    const item = btn.closest(".item");
+    const finishedList = document.getElementById("finishedList");
+
+    if (item && finishedList) {
+        btn.remove(); // شيل زرار الصح
+        finishedList.appendChild(item);
+        saveData(); // 🔥 حفظ فوراً بعد النقل
+    }
+}
+
+// دالة الحذف + حفظ تلقائي
+function deleteItem(btn) {
+    const item = btn.closest(".item");
+    if (item) {
+        item.remove();
+        saveData(); // 🔥 حفظ فوراً بعد الحذف
+    }
+}
+
+// دالة إنشاء العنصر (HTML الداخلي)
 function createItem(name, targetId) {
+    const list = document.getElementById(targetId);
     const item = document.createElement("div");
     item.className = "item";
 
@@ -138,62 +149,39 @@ function createItem(name, targetId) {
         <span>${name}</span>
         <div class="actions">
             ${targetId === "requestList" 
-                ? `<button onclick="moveToFinished(this)" style="background:#28a745;">✔</button>` 
+                ? '<button onclick="moveToFinished(this)" style="background:#28a745;">✔</button>' 
                 : ''
             }
             <button onclick="deleteItem(this)" style="background:transparent; border:1px solid #ff0033; color:#ff0033;">❌</button>
         </div>
     `;
-
-    document.getElementById(targetId).appendChild(item);
+    list.appendChild(item);
 }
 
-// 4. دالة النقل
-function moveToFinished(btn) {
-    const item = btn.closest(".item");
-    const finishedList = document.getElementById("finishedList");
-
-    if (item && finishedList) {
-        btn.remove(); // حذف زرار الصح
-        finishedList.appendChild(item);
-        saveData(); // حفظ بعد النقل
-    }
-}
-
-// 5. دالة الحذف
-function deleteItem(btn) {
-    const item = btn.closest(".item");
-    if (item) {
-        item.remove();
-        saveData(); // حفظ بعد الحذف
-    }
-}
-
-// 6. 🔥 دالة الحفظ (تجمع الأسماء وتحولها لنص JSON)
+// 🔥 المحرك الأساسي للحفظ (saveData)
 function saveData() {
     const requestItems = [];
     const finishedItems = [];
 
-    document.querySelectorAll("#requestList .item span").forEach(el => {
-        requestItems.push(el.innerText);
-    });
+    // نلف على كل الـ spans وناخد النص اللي جواها
+    document.querySelectorAll("#requestList .item span").forEach(el => requestItems.push(el.innerText));
+    document.querySelectorAll("#finishedList .item span").forEach(el => finishedItems.push(el.innerText));
 
-    document.querySelectorAll("#finishedList .item span").forEach(el => {
-        finishedItems.push(el.innerText);
-    });
-
+    // تحويل المصفوفات لنص JSON وتخزينها
     localStorage.setItem("requestGames", JSON.stringify(requestItems));
     localStorage.setItem("finishedGames", JSON.stringify(finishedItems));
+    
+    console.log("Auto-Saved!"); // عشان تتأكد في الـ Console إن الحفظ شغال
 }
 
-// 7. 🔥 دالة التحميل (بتقرأ البيانات من ذاكرة المتصفح)
+// دالة التحميل (loadData)
 function loadData() {
-    // تنظيف القوائم أولاً عشان ميكررش البيانات
-    document.getElementById("requestList").innerHTML = "";
-    document.getElementById("finishedList").innerHTML = "";
-
     const request = JSON.parse(localStorage.getItem("requestGames")) || [];
     const finished = JSON.parse(localStorage.getItem("finishedGames")) || [];
+
+    // تنظيف القوائم قبل التحميل لضمان عدم التكرار
+    document.getElementById("requestList").innerHTML = "";
+    document.getElementById("finishedList").innerHTML = "";
 
     request.forEach(name => createItem(name, "requestList"));
     finished.forEach(name => createItem(name, "finishedList"));
