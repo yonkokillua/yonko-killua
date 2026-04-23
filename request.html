@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Yonko Killua gaming hub. Streaming, programming, horror games and content creator.">
+
+<meta name="keywords" content="Yonko Killua, gaming, streamer, genshin impact, pubg, mobile legends">
+
+<meta name="author" content="Yonko Killua">
+
+<title>Yonko Killua</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<!-- AOS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Particles -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+
+    <!-- BACKGROUND EFFECTS -->
+    <div id="particles-js"></div>
+
+    <nav>
+    <h2 class="logo">⚡ Yonko Killua</h2>
+
+    
+
+    <div class="menu-toggle" id="menu-toggle" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</nav>
+    <ul class="desktop-links">
+        <li><a href="request.html">Request To Play</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="request.html">Request To Play</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+
+    <div class="request-container">
+
+    <input type="text" id="gameInput" placeholder="اكتب اسم اللعبة">
+    <button onclick="addGame()">Add</button>
+
+    <div class="boxes">
+
+        <div class="box">
+            <h3>Request To Play</h3>
+            <div id="requestList"></div>
+        </div>
+
+        <div class="box">
+            <h3>Finished</h3>
+            <div id="finishedList"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<footer>
+    © 2026 Yonko Killua | Gaming Hub
+</footer>
+
+<script src="script.js"></script>
+
+<!-- AOS INIT -->
+<script>
+    AOS.init({
+    duration: 900,
+    once: true
+});
+function toggleMenu() {
+    const menu = document.getElementById("mobileMenu");
+    if (menu) {
+        menu.classList.toggle("active");
+        console.log("تم الضغط والقائمة مفترض تظهر الآن");
+    } else {
+        console.error("المشكلة: العنصر mobileMenu غير موجود في الصفحة");
+    }
+}
+
+function addGame() {
+    // 1. مسك الأنبوت والقيم
+    const input = document.getElementById("gameInput");
+    const requestList = document.getElementById("requestList");
+    
+    if (!input || !requestList) {
+        console.error("تأكد من وجود IDs: gameInput و requestList");
+        return;
+    }
+
+    const value = input.value.trim();
+
+    // 2. التحقق من إن الخانة مش فاضية
+    if (value === "") {
+        alert("اكتب اسم اللعبة الأول!");
+        return;
+    }
+
+    // 3. إنشاء العنصر (Item)
+    const item = document.createElement("div");
+    item.className = "item";
+
+    item.innerHTML = `
+        <span>${value}</span>
+        <div class="actions">
+            <button onclick="moveToFinished(this)" style="background: #28a745;">✔</button>
+            <button onclick="deleteItem(this)" style="background: transparent; border: 1px solid #ff0033; color: #ff0033;">❌</button>
+        </div>
+    `;
+
+    // 4. الإضافة للقائمة ومسح الأنبوت
+    requestList.appendChild(item);
+    input.value = "";
+    input.focus(); // يرجع الماوس للأنبوت عشان تكتب تاني بسرعة
+}
+
+function moveToFinished(btn) {
+    const item = btn.closest('.item');
+    const finishedList = document.getElementById("finishedList");
+    
+    if (item && finishedList) {
+        btn.remove(); // شيل زرار الصح بس
+        finishedList.appendChild(item);
+    }
+}
+
+function deleteItem(btn) {
+    const item = btn.closest('.item');
+    if (item) {
+        item.remove();
+    }
+}
+
+// 5. ميزة إضافية: لما تدوس Enter يضيف اللعبة برضه
+document.getElementById("gameInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        addGame();
+    }
+});
+</script>
+</body>
+</html>
