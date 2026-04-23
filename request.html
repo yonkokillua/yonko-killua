@@ -56,6 +56,7 @@
 
     <input type="text" id="gameInput" placeholder="اكتب اسم اللعبة">
     <button onclick="addGame()">Add</button>
+    <button onclick="saveData()">Confirm</button>
 
     <div class="boxes">
 
@@ -98,65 +99,136 @@ function toggleMenu() {
     }
 }
 
+// ==========================
+// تحميل البيانات عند فتح الصفحة
+// ==========================
+document.addEventListener("DOMContentLoaded", function(){
+
+    loadData();
+
+    const input = document.getElementById("gameInput");
+    if(input){
+        input.addEventListener("keypress", function(e){
+            if(e.key === "Enter"){
+                addGame();
+            }
+        });
+    }
+});
+
+
+// ==========================
+// إضافة لعبة
+// ==========================
 function addGame() {
-    // 1. مسك الأنبوت والقيم
+
     const input = document.getElementById("gameInput");
     const requestList = document.getElementById("requestList");
-    
-    if (!input || !requestList) {
-        console.error("تأكد من وجود IDs: gameInput و requestList");
-        return;
-    }
+
+    if (!input || !requestList) return;
 
     const value = input.value.trim();
 
-    // 2. التحقق من إن الخانة مش فاضية
     if (value === "") {
         alert("اكتب اسم اللعبة الأول!");
         return;
     }
 
-    // 3. إنشاء العنصر (Item)
+    createItem(value, "requestList");
+
+    input.value = "";
+    input.focus();
+
+    saveData(); // 👈 حفظ تلقائي
+}
+
+
+// ==========================
+// إنشاء عنصر
+// ==========================
+function createItem(name, targetId){
+
     const item = document.createElement("div");
     item.className = "item";
 
     item.innerHTML = `
-        <span>${value}</span>
+        <span>${name}</span>
         <div class="actions">
-            <button onclick="moveToFinished(this)" style="background: #28a745;">✔</button>
-            <button onclick="deleteItem(this)" style="background: transparent; border: 1px solid #ff0033; color: #ff0033;">❌</button>
+            ${targetId === "requestList" 
+                ? '<button onclick="moveToFinished(this)" style="background:#28a745;">✔</button>' 
+                : ''
+            }
+            <button onclick="deleteItem(this)" style="background:transparent; border:1px solid #ff0033; color:#ff0033;">❌</button>
         </div>
     `;
 
-    // 4. الإضافة للقائمة ومسح الأنبوت
-    requestList.appendChild(item);
-    input.value = "";
-    input.focus(); // يرجع الماوس للأنبوت عشان تكتب تاني بسرعة
+    document.getElementById(targetId).appendChild(item);
 }
 
+
+// ==========================
+// نقل لـ Finished
+// ==========================
 function moveToFinished(btn) {
-    const item = btn.closest('.item');
+
+    const item = btn.closest(".item");
     const finishedList = document.getElementById("finishedList");
-    
+
     if (item && finishedList) {
-        btn.remove(); // شيل زرار الصح بس
+        btn.remove(); // شيل زرار الصح
         finishedList.appendChild(item);
+
+        saveData(); // 👈 حفظ تلقائي
     }
 }
 
+
+// ==========================
+// حذف
+// ==========================
 function deleteItem(btn) {
-    const item = btn.closest('.item');
+
+    const item = btn.closest(".item");
+
     if (item) {
         item.remove();
+        saveData(); // 👈 حفظ تلقائي
     }
 }
 
-// 5. ميزة إضافية: لما تدوس Enter يضيف اللعبة برضه
-document.getElementById("gameInput").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        addGame();
-    }
-});
+
+// ==========================
+// حفظ البيانات
+// ==========================
+function saveData(){
+
+    const requestItems = [];
+    const finishedItems = [];
+
+    document.querySelectorAll("#requestList .item span").forEach(el=>{
+        requestItems.push(el.textContent);
+    });
+
+    document.querySelectorAll("#finishedList .item span").forEach(el=>{
+        finishedItems.push(el.textContent);
+    });
+
+    localStorage.setItem("requestGames", JSON.stringify(requestItems));
+    localStorage.setItem("finishedGames", JSON.stringify(finishedItems));
+}
+
+
+// ==========================
+// تحميل البيانات
+// ==========================
+function loadData(){
+
+    const request = JSON.parse(localStorage.getItem("requestGames")) || [];
+    const finished = JSON.parse(localStorage.getItem("finishedGames")) || [];
+
+    request.forEach(name => createItem(name, "requestList"));
+    finished.forEach(name => createItem(name, "finishedList"));
+}
 </script>
 </body>
 </html>
