@@ -178,3 +178,72 @@ function moveToFinished(btn){
 
     document.getElementById("finishedList").appendChild(item);
 }
+
+document.addEventListener("DOMContentLoaded", loadChat);
+
+function sendMessage(){
+
+    const input = document.getElementById("messageInput");
+    const fileInput = document.getElementById("fileInput");
+    const chatBox = document.getElementById("chatBox");
+
+    const text = input.value.trim();
+    const file = fileInput.files[0];
+
+    if(text === "" && !file) return;
+
+    const msg = document.createElement("div");
+    msg.className = "message";
+
+    // نص
+    if(text){
+        const p = document.createElement("p");
+        p.textContent = text;
+        msg.appendChild(p);
+    }
+
+    // ملف (صورة / فيديو)
+    if(file){
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+            if(file.type.startsWith("image")){
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                msg.appendChild(img);
+            }
+            else if(file.type.startsWith("video")){
+                const video = document.createElement("video");
+                video.src = e.target.result;
+                video.controls = true;
+                msg.appendChild(video);
+            }
+
+            chatBox.appendChild(msg);
+            saveChat();
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        chatBox.appendChild(msg);
+        saveChat();
+    }
+
+    input.value = "";
+    fileInput.value = "";
+}
+
+
+// 💾 حفظ
+function saveChat(){
+    localStorage.setItem("chatData", document.getElementById("chatBox").innerHTML);
+}
+
+
+// 🔄 تحميل
+function loadChat(){
+    const data = localStorage.getItem("chatData");
+    if(data){
+        document.getElementById("chatBox").innerHTML = data;
+    }
+}
