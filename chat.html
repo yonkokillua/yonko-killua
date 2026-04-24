@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Yonko Killua gaming hub. Streaming, programming, horror games and content creator.">
+
+<meta name="keywords" content="Yonko Killua, gaming, streamer, genshin impact, pubg, mobile legends">
+
+<meta name="author" content="Yonko Killua">
+
+<title>Yonko Killua</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<!-- AOS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Particles -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+
+<body>
+
+    <!-- BACKGROUND EFFECTS -->
+<div id="particles-js"></div>
+
+
+<!-- NAV -->
+<nav>
+    <h2 class="logo">⚡ Yonko Killua</h2>
+
+    
+
+    <div class="menu-toggle" id="menu-toggle" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</nav>
+    <ul class="desktop-links">
+        <li><a href="request.html">Request To Play</a></li>
+        <li><a href="Chat">Chat</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="request.html">Request To Play</a>
+        <a href="Chat.html">Chat</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+<div class="chat-wrapper">
+
+    <h3 class="chat-title">أهلا بك في شلة الكحيانين </h3>
+
+    <div class="chat-container">
+
+        <div id="chatBox"></div>
+
+        <div class="chat-input">
+
+            <input type="text" id="messageInput" placeholder="اكتب رسالة...">
+
+            <label class="file-btn">
+                
+                <input type="file" id="fileInput" accept="image/*,video/*">
+            </label>
+
+            <button class="send-btn" onclick="sendMessage()">➤</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+    </section>
+
+<footer>
+    © 2026 Yonko Killua | Gaming Hub
+</footer>
+
+<script src="script.js"></script>
+
+<!-- AOS INIT -->
+<script>
+AOS.init({
+    duration: 900,
+    once: true
+});
+function toggleMenu() {
+    const menu = document.getElementById("mobileMenu");
+    if (menu) {
+        menu.classList.toggle("active");
+        console.log("تم الضغط والقائمة مفترض تظهر الآن");
+    } else {
+        console.error("المشكلة: العنصر mobileMenu غير موجود في الصفحة");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadChat);
+
+function sendMessage(){
+
+    const input = document.getElementById("messageInput");
+    const fileInput = document.getElementById("fileInput");
+    const chatBox = document.getElementById("chatBox");
+
+    const text = input.value.trim();
+    const file = fileInput.files[0];
+
+    if(text === "" && !file) return;
+
+    const msg = document.createElement("div");
+    msg.className = "message";
+
+    // نص
+    if(text){
+        const p = document.createElement("p");
+        p.textContent = text;
+        msg.appendChild(p);
+    }
+
+    // ملف (صورة / فيديو)
+    if(file){
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+            if(file.type.startsWith("image")){
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                msg.appendChild(img);
+            }
+            else if(file.type.startsWith("video")){
+                const video = document.createElement("video");
+                video.src = e.target.result;
+                video.controls = true;
+                msg.appendChild(video);
+            }
+
+            chatBox.appendChild(msg);
+            saveChat();
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        chatBox.appendChild(msg);
+        saveChat();
+    }
+
+    input.value = "";
+    fileInput.value = "";
+}
+
+
+// 💾 حفظ
+function saveChat(){
+    localStorage.setItem("chatData", document.getElementById("chatBox").innerHTML);
+}
+
+
+// 🔄 تحميل
+function loadChat(){
+    const data = localStorage.getItem("chatData");
+    if(data){
+        document.getElementById("chatBox").innerHTML = data;
+    }
+}
+</script>
+
+</body>
+</html>
