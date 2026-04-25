@@ -2186,52 +2186,56 @@ button:hover{
 
 .message {
     display: flex !important;
-    flex-direction: row !important; /* نرجعه للوضع الطبيعي */
+    justify-content: space-between !important; /* يرمي الزرار في طرف والمحتوى في طرف */
     align-items: center !important;
     padding: 10px;
     margin: 10px 0;
     background: rgba(255, 0, 51, 0.1);
     border-radius: 10px;
-    justify-content: space-between;
-    direction: ltr; /* نأكد إن الاتجاه يبدأ من اليمين */
-    
+    direction: rtl; /* يخلي البداية من اليمين */
 }
 
-.msg-content {
+/* الصندوق اللي شايل النص والصورة مع بعض */
+.content-side {
     display: flex;
-    align-items: center;
-    gap: 10px; /* الكلام هيفضل واخد اليمين طبيعي */
+    flex-direction: column; /* يخلي النص فوق الميديا */
+    align-items: flex-start; /* يخليهم محاذيين لليمين (بداية الـ RTL) */
+    gap: 8px;
+    max-width: 80%;
 }
 
-.msg-content p{
-    margin: 0; /* 👈 مهم جدًا */
+.content-side p {
+    margin: 0;
+    color: white;
+    word-break: break-word;
+}
+
+.content-side img, .content-side video {
+    max-width: 200px; /* حجم معقول للميديا */
+    border-radius: 8px;
+    border: 1px solid #ff0033;
+    
 }
 
 .delete-btn {
     background: transparent;
     border: 1px solid #ff0033;
     color: #ff0033;
-    padding: 4px 10px;
-    border-radius: 6px;
+    padding: 5px;
+    border-radius: 50%; /* شكل دائري بسيط للزرار */
     cursor: pointer;
-    font-size: 12px;
-    
-    
-    display: flex;
-    margin-top: auto;
-    margin-bottom: auto;
-    direction: ltr; /* نأكد إن الاتجاه يبدأ من اليمين */
-    margin-right: auto;
-    
-    transition: 0.3s;
+    flex-shrink: 0; /* يمنع الزرار من التمدد */
 }
 
 /* تعديل بسيط للصور عشان متكسرش السطر */
 .message img, .message video {
-    max-width: 100%;
+    max-width: 30%;
     border-radius: 8px;
     display: block;
+    
 }
+
+
 .chat-input{
     display:flex;
     gap:8px;
