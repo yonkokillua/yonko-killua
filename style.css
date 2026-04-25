@@ -2222,8 +2222,9 @@ button:hover{
     border: 1px solid #ff0033;
     color: #ff0033;
     padding: 5px;
-    border-radius: 50%; /* شكل دائري بسيط للزرار */
+    border-radius: 10px; /* شكل دائري بسيط للزرار */
     cursor: pointer;
+    
     flex-shrink: 0; /* يمنع الزرار من التمدد */
 }
 
@@ -2414,8 +2415,9 @@ button:hover{
 
 /* زر الحذف */
 .delete-btn{
-    padding: 3px 8px;
+    padding: 5px 8px;
     font-size: 11px;
+    margin-bottom: 20px;
 }
 
 /* صندوق الإدخال */
@@ -2599,7 +2601,7 @@ button:hover{
 
 /* زر الحذف */
 .delete-btn{
-    padding: 3px 8px;
+    padding: 5px 8px;
     font-size: 11px;
 }
 
