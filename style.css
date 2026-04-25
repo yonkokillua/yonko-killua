@@ -2224,7 +2224,7 @@ button:hover{
     padding: 5px;
     border-radius: 10px; /* شكل دائري بسيط للزرار */
     cursor: pointer;
-    
+    margin-bottom: 20px;
     flex-shrink: 0; /* يمنع الزرار من التمدد */
 }
 
