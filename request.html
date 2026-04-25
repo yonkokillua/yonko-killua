@@ -82,9 +82,11 @@
     © 2026 Yonko Killua | Gaming Hub
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="script.js"></script>
 
-<!-- AOS INIT -->
+
 <script>
    
 function toggleMenu() {
@@ -97,82 +99,103 @@ function toggleMenu() {
     }
 }
 
-// دالة الحفظ التلقائي
-function saveData() {
-    try {
-        const requestItems = [];
-        const finishedItems = [];
+const firebaseConfig = {
+    apiKey: "AIzaSyAdqfd28EFbC084E-N-kluWszJOGzQJqCw",
+    authDomain: "chat-63d37.firebaseapp.com",
+    databaseURL: "https://chat-63d37-default-rtdb.firebaseio.com",
+    projectId: "chat-63d37",
+    storageBucket: "chat-63d37.firebasestorage.app",
+    messagingSenderId: "1032264762672",
+    appId: "1:1032264762672:web:78e55ff2fb296c826ef4f5"
+};
 
-        document.querySelectorAll("#requestList .item span").forEach(el => {
-            requestItems.push(el.innerText.trim());
-        });
-
-        document.querySelectorAll("#finishedList .item span").forEach(el => {
-            finishedItems.push(el.innerText.trim());
-        });
-
-        localStorage.setItem("requestGames", JSON.stringify(requestItems));
-        localStorage.setItem("finishedGames", JSON.stringify(finishedItems));
-        console.log("✅ تم الحفظ في الذاكرة");
-    } catch (e) {
-        console.error("خطأ أثناء الحفظ:", e);
-    }
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
 }
+const database = firebase.database();
 
-// دالة التحميل
-function loadData() {
-    try {
-        const req = JSON.parse(localStorage.getItem("requestGames")) || [];
-        const fin = JSON.parse(localStorage.getItem("finishedGames")) || [];
 
-        document.getElementById("requestList").innerHTML = "";
-        document.getElementById("finishedList").innerHTML = "";
+// 1. المرجع في قاعدة البيانات (هنعمل فرعين: واحد للطلبات وواحد للمنتهي)
+const requestRef = database.ref("games/requests");
+const finishedRef = database.ref("games/finished");
 
-        req.forEach(name => createItem(name, "requestList"));
-        fin.forEach(name => createItem(name, "finishedList"));
-        console.log("📥 تم استرجاع البيانات");
-    } catch (e) {
-        console.log("الذاكرة فارغة حالياً");
-    }
-}
-
-// تعديل بسيط لدالة الإضافة عشان تحفظ
+// --- دالة الإضافة (الارسال للفايربيس) ---
 function addGame() {
     const input = document.getElementById("gameInput");
     if (!input || input.value.trim() === "") return;
 
-    createItem(input.value.trim(), "requestList");
+    // بنبعت الاسم للفايربيس
+    requestRef.push({
+        name: input.value.trim()
+    });
+
     input.value = "";
-    saveData(); // حفظ فوراً
 }
 
-function createItem(name, targetId) {
+// --- الاستماع للبيانات (عرض البيانات للكل) ---
+
+// للطلبات الجديدة
+requestRef.on("child_added", (snapshot) => {
+    createItemUI(snapshot.val().name, "requestList", snapshot.key);
+});
+
+// للالعاب المنتهية
+finishedRef.on("child_added", (snapshot) => {
+    createItemUI(snapshot.val().name, "finishedList", snapshot.key);
+});
+
+// للاستماع عند الحذف (عشان تتمسح من عند الكل)
+database.ref("games").on("child_removed", (snapshot) => {
+    // كود الحذف من الواجهة (لو حذفت فرع كامل)
+});
+
+// دالة بناء الواجهة
+function createItemUI(name, targetId, key) {
     const item = document.createElement("div");
     item.className = "item";
+    item.setAttribute("data-key", key); // مهم جداً عشان نعرف نحذفها
+    
     item.innerHTML = `
         <span>${name}</span>
         <div class="actions">
-            ${targetId === "requestList" ? '<button onclick="moveToFinished(this)">✔</button>' : ''}
-            <button onclick="deleteItem(this)">❌</button>
+            ${targetId === "requestList" ? `<button onclick="moveToFinished('${key}', '${name}')">✔</button>` : ''}
+            <button onclick="deleteItem('${key}', '${targetId}')">❌</button>
         </div>
     `;
     document.getElementById(targetId).appendChild(item);
 }
 
-function moveToFinished(btn) {
-    const item = btn.closest(".item");
-    btn.remove();
-    document.getElementById("finishedList").appendChild(item);
-    saveData();
+// --- دالة النقل (من طلبات إلى منتهي) ---
+function moveToFinished(key, name) {
+    // 1. نمسحها من الطلبات
+    requestRef.child(key).remove();
+    // 2. نضيفها في المنتهي
+    finishedRef.push({ name: name });
+    
+    // هنمسحها من الواجهة يدوياً برضه لضمان السرعة
+    document.querySelector(`[data-key="${key}"]`).remove();
 }
 
-function deleteItem(btn) {
-    btn.closest(".item").remove();
-    saveData();
+// --- دالة الحذف النهائي ---
+function deleteItem(key, targetId) {
+    const ref = (targetId === "requestList") ? requestRef : finishedRef;
+    ref.child(key).remove();
+    
+    // مسح من الواجهة
+    const el = document.querySelector(`[data-key="${key}"]`);
+    if(el) el.remove();
 }
 
-// تشغيل التحميل أول ما الصفحة تفتح
-window.onload = loadData;
+// استماع للحذف من السيرفر (عشان لو مبرمج تاني مسحها تختفي عندك)
+requestRef.on("child_removed", (snapshot) => {
+    const el = document.querySelector(`[data-key="${snapshot.key}"]`);
+    if(el) el.remove();
+});
+
+finishedRef.on("child_removed", (snapshot) => {
+    const el = document.querySelector(`[data-key="${snapshot.key}"]`);
+    if(el) el.remove();
+});
 </script>
 </body>
 </html>
