@@ -87,7 +87,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script src="script.js"></script>
 
 
@@ -104,18 +103,18 @@ function toggleMenu() {
 }
 
 // بيانات مشروعك (صحيحة 100%)
-const firebaseConfig = {
-    apiKey: "AIzaSyBhawldRgwyHaIYcxGvm-Ajy3GjWIHnSsw",
-    authDomain: "kahyaneen-chat.firebaseapp.com",
-    databaseURL: "https://kahyaneen-chat-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "kahyaneen-chat",
-    storageBucket: "kahyaneen-chat.firebasestorage.app",
-    messagingSenderId: "307232006173",
-    appId: "1:307232006173:web:c552e336d2a9c3ec0866f4",
-    measurementId: "G-ZPWVD24Q26"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyAdqfd28EFbC084E-N-kluWszJOGzQJqCw",
+    authDomain: "chat-63d37.firebaseapp.com",
+    projectId: "chat-63d37",
+    databaseURL: "https://chat-63d37-default-rtdb.firebaseio.com", // ضيف السطر ده وتأكد إنه صح من الفايربيس
+    storageBucket: "chat-63d37.firebasestorage.app",
+    messagingSenderId: "1032264762672",
+    appId: "1:1032264762672:web:78e55ff2fb296c826ef4f5",
+    measurementId: "G-E4F39EKBNF"
+  };
 
-// تشغيل فايربيس (تأكد إنه مش شغال قبل كدة)
+// تشغيل فايربيس
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -123,46 +122,50 @@ if (!firebase.apps.length) {
 const database = firebase.database();
 const chatRef = database.ref("messages");
 
-// دالة الإرسال
+// إعدادات كلاوديناري (دي اللي هتخليك ترفع فيديوهات كبيرة في صفحتك)
+// بيانات كلاوديناري الخاصة بك (تم التعديل ببياناتك)
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/djnlusqyu/upload';
+const CLOUDINARY_UPLOAD_PRESET = 'ijkvduvm'; 
+
 function sendMessage() {
     const input = document.getElementById("messageInput");
     const fileInput = document.getElementById("fileInput");
-    const chatBox = document.getElementById("chatBox");
-
-    const text = input.value.trim();
     const file = fileInput.files[0];
+    const text = input.value.trim();
 
-    if (text === "" && !file) return;
+    if (!text && !file) return;
 
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            chatRef.push({
-                text: text,
-                fileData: e.target.result,
-                fileType: file.type
-            });
-        };
-        reader.readAsDataURL(file);
-    } else {
-        chatRef.push({
-            text: text,
-            fileData: null,
-            fileType: "none"
-        });
-    }
+        console.log("جاري الرفع...");
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        // السطر ده مهم عشان كلاوديناري يعرف إنه فيديو أو صورة تلقائياً
+        formData.append('resource_type', 'auto'); 
 
+        fetch(CLOUDINARY_URL, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.secure_url) {
+                chatRef.push({
+                    text: text,
+                    fileData: data.secure_url, 
+                    fileType: file.type, // ده بيبعت image/png أو video/mp4
+                    timestamp: Date.now()
+                });
+            }
+        })
+        .catch(err => alert("خطأ في الرفع، جرب فيديو أصغر"));
+    } else {
+        chatRef.push({ text: text, fileData: null, fileType: "none" });
+    }
     input.value = "";
     fileInput.value = "";
 }
 
-// استقبال الرسائل
-chatRef.on("child_added", (snapshot) => {
-    const m = snapshot.val();
-    createMessageUI(m.text, m.fileData, m.fileType, snapshot.key);
-});
-
-// بناء الواجهة
 function createMessageUI(text, fileData, fileType, key) {
     const chatBox = document.getElementById("chatBox");
     if (!chatBox) return;
@@ -171,44 +174,55 @@ function createMessageUI(text, fileData, fileType, key) {
     msg.className = "message";
     msg.setAttribute("data-key", key);
 
-    const content = document.createElement("div");
-    content.className = "msg-content";
+    // 1. هنعمل صندوق "المحتوى" اللي هيشيل (النص والميديا) مع بعض
+    const contentSide = document.createElement("div");
+    contentSide.className = "content-side";
 
-    const delBtn = document.createElement("button");
-    delBtn.className = "delete-btn";
-    delBtn.innerHTML = "❌";
-    
-    delBtn.onclick = function() {
-        database.ref("messages/" + key).remove();
-    };
-
-    msg.appendChild(content);
-    msg.appendChild(delBtn);
-
+    // 2. النص
     if (text) {
         const p = document.createElement("p");
         p.textContent = text;
-        msg.appendChild(p);
+        contentSide.appendChild(p);
     }
 
+    // 3. الميديا (صور أو فيديو)
     if (fileData) {
-        if (fileType.includes("image")) {
-            const img = document.createElement("img");
-            img.src = fileData;
-            content.appendChild(img);
-        } else if (fileType.includes("video")) {
-            const video = document.createElement("video");
-            video.src = fileData;
-            video.controls = true;
-            content.appendChild(video);
+        let mediaTag;
+        if (fileType && fileType.includes("video")) {
+            mediaTag = document.createElement("video");
+            mediaTag.controls = true;
+        } else {
+            mediaTag = document.createElement("img");
         }
+        mediaTag.src = fileData;
+        contentSide.appendChild(mediaTag);
     }
 
+    // 4. زر الحذف (لوحده)
+    const delBtn = document.createElement("button");
+    delBtn.className = "delete-btn";
+    delBtn.innerHTML = "❌";
+    delBtn.onclick = () => database.ref("messages/" + key).remove();
+
+// الترتيب الصحيح للـ RTL:
+    // بنضيف المحتوى أولاً عشان ياخد أقصى اليمين
+    msg.appendChild(contentSide); 
+    
+    // بنضيف الزرار ثانياً عشان يروح أقصى الشمال
+    msg.appendChild(delBtn);
+
+    
     chatBox.appendChild(msg);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+// 1. استماع للرسايل الجديدة (عشان تظهر فوراً)
+chatRef.on("child_added", (snapshot) => {
+    const m = snapshot.val();
+    // بنادي الدالة اللي إنت عاملها عشان ترسم الرسالة
+    createMessageUI(m.text, m.fileData, m.fileType, snapshot.key);
+});
 
-// مسح الرسالة
+// 2. الاستماع لو رسالة اتمسحت (عشان تختفي من الشاشة)
 chatRef.on("child_removed", (snapshot) => {
     const key = snapshot.key;
     const msgNode = document.querySelector(`[data-key="${key}"]`);
