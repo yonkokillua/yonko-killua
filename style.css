@@ -2184,21 +2184,54 @@ button:hover{
     border-bottom:1px solid #ff0033;
 }
 
-.message{
-    margin:10px 0;
-    padding:10px;
-    background:rgba(255,0,51,0.1);
-    border-radius:10px;
-    word-wrap:break-word;
+.message {
+    display: flex !important;
+    flex-direction: row !important; /* نرجعه للوضع الطبيعي */
+    align-items: center !important;
+    padding: 10px;
+    margin: 10px 0;
+    background: rgba(255, 0, 51, 0.1);
+    border-radius: 10px;
+    justify-content: space-between;
+    direction: ltr; /* نأكد إن الاتجاه يبدأ من اليمين */
+    
 }
 
-.message img,
-.message video{
-    max-width:60%;
-    margin-top:8px;
-    border-radius:8px;
+.msg-content {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* الكلام هيفضل واخد اليمين طبيعي */
 }
 
+.msg-content p{
+    margin: 0; /* 👈 مهم جدًا */
+}
+
+.delete-btn {
+    background: transparent;
+    border: 1px solid #ff0033;
+    color: #ff0033;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    
+    
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    direction: ltr; /* نأكد إن الاتجاه يبدأ من اليمين */
+    margin-right: auto;
+    
+    transition: 0.3s;
+}
+
+/* تعديل بسيط للصور عشان متكسرش السطر */
+.message img, .message video {
+    max-width: 30%;
+    border-radius: 8px;
+    display: block;
+}
 .chat-input{
     display:flex;
     gap:8px;
@@ -2326,4 +2359,244 @@ button:hover{
 .send-btn:hover{
     background:black;
     border:1px solid #ff0033;
+}
+
+
+@media (max-width: 768px) {
+
+.chat-wrapper{
+    width: 100%;
+    max-width: 100%;
+    
+    margin: 20px auto;
+    padding: 0 10px;
+}
+
+.chat-title{
+    font-size: 22px;
+}
+
+/* الصندوق الرئيسي */
+.chat-container{
+    padding: 10px;
+    border-radius: 10px;
+    
+}
+
+/* مساحة الشات */
+#chatBox{
+    height: 590px;
+
+    padding: 8px;
+}
+
+/* الرسائل */
+.message{
+    padding: 8px;
+    margin: 8px 0;
+    font-size: 13px;
+}
+
+/* النص */
+.msg-content p{
+    font-size: 13px;
+}
+
+/* الصور والفيديو */
+.message img,
+.message video{
+    max-width: 60%;
+}
+
+/* زر الحذف */
+.delete-btn{
+    padding: 3px 8px;
+    font-size: 11px;
+}
+
+/* صندوق الإدخال */
+.chat-input{
+    flex-direction: row;
+    gap: 5px;
+    padding: 5px;
+}
+
+/* input الكتابة */
+.chat-input input[type="text"]{
+    font-size: 13px;
+    padding: 8px;
+}
+
+/* زرار الإرسال */
+.chat-input button{
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+/* زر رفع الملف */
+.file-btn{
+    width: 50px;
+    padding: 8px;
+}
+
+/* كلمة DROP */
+.file-btn::after{
+    font-size: 10px;
+}
+
+.send-btn{
+    padding: 8px;
+    font-size: 12px;
+}
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+.chat-wrapper{
+    width: 95%;
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+.chat-title{
+    font-size: 28px;
+}
+
+/* الصندوق */
+.chat-container{
+    padding: 12px;
+}
+
+/* مساحة الشات */
+#chatBox{
+    height: 1000px;
+}
+
+/* الرسائل */
+.message{
+    padding: 10px;
+    font-size: 14px;
+}
+
+/* النص */
+.msg-content p{
+    font-size: 14px;
+}
+
+/* الصور والفيديو */
+.message img,
+.message video{
+    max-width: 45%;
+}
+
+/* الإدخال */
+.chat-input{
+    gap: 8px;
+    padding: 6px;
+}
+
+/* input */
+.chat-input input[type="text"]{
+    font-size: 14px;
+    padding: 10px;
+}
+
+/* زر الإرسال */
+.chat-input button{
+    padding: 10px 14px;
+    font-size: 13px;
+}
+
+/* زر رفع الملف */
+.file-btn{
+    width: 70px;
+}
+
+.file-btn::after{
+    font-size: 12px;
+}
+
+/* زر الحذف */
+.delete-btn{
+    padding: 4px 9px;
+    font-size: 12px;
+}
+
+}
+
+
+
+@media (min-width: 768px) and (max-width: 820px) {
+
+.chat-wrapper{
+    width: 96%;
+    margin: 25px auto;
+}
+
+.chat-title{
+    font-size: 24px;
+}
+
+/* الحاوية */
+.chat-container{
+    padding: 10px;
+}
+
+/* الشات */
+#chatBox{
+    height: 850px;
+    padding: 8px;
+}
+
+/* الرسائل */
+.message{
+    padding: 8px;
+    font-size: 13px;
+}
+
+/* النص */
+.msg-content p{
+    font-size: 13px;
+}
+
+/* الصور والفيديو */
+.message img,
+.message video{
+    max-width: 55%;
+}
+
+/* الإدخال */
+.chat-input{
+    gap: 6px;
+    padding: 6px;
+}
+
+/* input */
+.chat-input input[type="text"]{
+    font-size: 13px;
+    padding: 8px;
+}
+
+/* زر الإرسال */
+.chat-input button{
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+/* زر رفع الملف */
+.file-btn{
+    width: 60px;
+}
+
+.file-btn::after{
+    font-size: 11px;
+}
+
+/* زر الحذف */
+.delete-btn{
+    padding: 3px 8px;
+    font-size: 11px;
+}
+
 }
