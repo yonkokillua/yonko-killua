@@ -85,9 +85,12 @@
     © 2026 Yonko Killua | Gaming Hub
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <script src="script.js"></script>
 
-<!-- AOS INIT -->
+
 <script>
 
 function toggleMenu() {
@@ -100,35 +103,32 @@ function toggleMenu() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", loadChat);
-
-document.addEventListener("DOMContentLoaded", loadChat);
-
-document.addEventListener("DOMContentLoaded", loadChat);
-
-// 1. أول ما الصفحة تفتح.. حمل البيانات
-window.onload = function() {
-    console.log("الصفحة حملت.. جاري استرجاع الشات");
-    loadChat();
+// بيانات مشروعك (صحيحة 100%)
+const firebaseConfig = {
+    apiKey: "AIzaSyBhawldRgwyHaIYcxGvm-Ajy3GjWIHnSsw",
+    authDomain: "kahyaneen-chat.firebaseapp.com",
+    databaseURL: "https://kahyaneen-chat-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "kahyaneen-chat",
+    storageBucket: "kahyaneen-chat.firebasestorage.app",
+    messagingSenderId: "307232006173",
+    appId: "1:307232006173:web:c552e336d2a9c3ec0866f4",
+    measurementId: "G-ZPWVD24Q26"
 };
 
-// 1. إعداد قاعدة البيانات العملاقة (IndexedDB)
-let db;
-const request = indexedDB.open("KahyaneenDB", 1);
+// تشغيل فايربيس (تأكد إنه مش شغال قبل كدة)
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
-request.onupgradeneeded = (e) => {
-    db = e.target.result;
-    db.createObjectStore("chat", { keyPath: "id", autoIncrement: true });
-};
+const database = firebase.database();
+const chatRef = database.ref("messages");
 
-request.onsuccess = (e) => {
-    db = e.target.result;
-    loadChat(); // تحميل الشات أول ما القاعدة تجهز
-};
-
+// دالة الإرسال
 function sendMessage() {
     const input = document.getElementById("messageInput");
     const fileInput = document.getElementById("fileInput");
+    const chatBox = document.getElementById("chatBox");
+
     const text = input.value.trim();
     const file = fileInput.files[0];
 
@@ -137,23 +137,39 @@ function sendMessage() {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            createMessageUI(text, e.target.result, file.type);
-            saveChat();
+            chatRef.push({
+                text: text,
+                fileData: e.target.result,
+                fileType: file.type
+            });
         };
         reader.readAsDataURL(file);
     } else {
-        createMessageUI(text, null, null);
-        saveChat();
+        chatRef.push({
+            text: text,
+            fileData: null,
+            fileType: "none"
+        });
     }
 
     input.value = "";
     fileInput.value = "";
 }
 
-function createMessageUI(text, fileData, fileType) {
+// استقبال الرسائل
+chatRef.on("child_added", (snapshot) => {
+    const m = snapshot.val();
+    createMessageUI(m.text, m.fileData, m.fileType, snapshot.key);
+});
+
+// بناء الواجهة
+function createMessageUI(text, fileData, fileType, key) {
     const chatBox = document.getElementById("chatBox");
+    if (!chatBox) return;
+
     const msg = document.createElement("div");
     msg.className = "message";
+    msg.setAttribute("data-key", key);
 
     const content = document.createElement("div");
     content.className = "msg-content";
@@ -163,8 +179,7 @@ function createMessageUI(text, fileData, fileType) {
     delBtn.innerHTML = "❌";
     
     delBtn.onclick = function() {
-        msg.remove();
-        saveChat();
+        database.ref("messages/" + key).remove();
     };
 
     msg.appendChild(content);
@@ -193,50 +208,12 @@ function createMessageUI(text, fileData, fileType) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// 2. دالة الحفظ الجديدة (بتشيل أحجام كبيرة)
-function saveChat() {
-    if (!db) return;
-    const allMsgs = [];
-    document.querySelectorAll(".message").forEach(msg => {
-        const p = msg.querySelector("p");
-        const img = msg.querySelector("img");
-        const video = msg.querySelector("video");
-
-        allMsgs.push({
-            text: p ? p.innerText : "",
-            fileData: img ? img.src : (video ? video.src : null),
-            fileType: img ? "image" : (video ? "video" : "none")
-        });
-    });
-
-    const transaction = db.transaction("chat", "readwrite");
-    const store = transaction.objectStore("chat");
-    
-    // بنمسح القديم ونحط الجديد كله
-    store.clear().onsuccess = () => {
-        store.add({ id: "currentChat", data: allMsgs });
-        console.log("✅ تم الحفظ في المخزن العملاق");
-    };
-}
-
-// 3. دالة التحميل
-function loadChat() {
-    if (!db) return;
-    const transaction = db.transaction("chat", "readonly");
-    const store = transaction.objectStore("chat");
-    const getReq = store.get("currentChat");
-
-    getReq.onsuccess = () => {
-        if (getReq.result) {
-            const messages = getReq.result.data;
-            const chatBox = document.getElementById("chatBox");
-            chatBox.innerHTML = ""; 
-            messages.forEach(m => {
-                createMessageUI(m.text, m.fileData, m.fileType);
-            });
-        }
-    };
-}
+// مسح الرسالة
+chatRef.on("child_removed", (snapshot) => {
+    const key = snapshot.key;
+    const msgNode = document.querySelector(`[data-key="${key}"]`);
+    if (msgNode) msgNode.remove();
+});
 </script>
 
 </body>
