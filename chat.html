@@ -62,6 +62,11 @@
 
         <div id="chatBox"></div>
 
+        <div id="uploadProgressContainer" style="display:none; width: 100%; background: #222; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ff0033;">
+    <div id="uploadProgressBar" style="width: 0%; height: 10px; background: #ff0033; border-radius: 10px; transition: width 0.3s;"></div>
+    <p id="progressText" style="color: white; font-size: 12px; text-align: center; margin: 5px 0;">جاري التحميل: 0%</p>
+</div>
+
         <div class="chat-input">
 
             <input type="text" id="messageInput" placeholder="اكتب رسالة...">
@@ -136,32 +141,66 @@ function sendMessage() {
     if (!text && !file) return;
 
     if (file) {
-        console.log("جاري الرفع...");
+        // إظهار شريط التحميل
+        const progressContainer = document.getElementById("uploadProgressContainer");
+        const progressBar = document.getElementById("uploadProgressBar");
+        const progressText = document.getElementById("progressText");
+        
+        progressContainer.style.display = "block";
+        progressBar.style.width = "0%";
+
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-        // السطر ده مهم عشان كلاوديناري يعرف إنه فيديو أو صورة تلقائياً
-        formData.append('resource_type', 'auto'); 
+        formData.append('resource_type', 'auto');
 
-        fetch(CLOUDINARY_URL, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.secure_url) {
+        // استخدام XMLHttpRequest لمراقبة التحميل
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', CLOUDINARY_URL, true);
+
+        // مراقبة التقدم
+        xhr.upload.onprogress = function(e) {
+            if (e.lengthComputable) {
+                const percentComplete = Math.round((e.loaded / e.total) * 100);
+                progressBar.style.width = percentComplete + "%";
+                progressText.innerText = "جاري التحميل: " + percentComplete + "%";
+            }
+        };
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+                // إرسال للفايربيس
                 chatRef.push({
                     text: text,
-                    fileData: data.secure_url, 
-                    fileType: file.type, // ده بيبعت image/png أو video/mp4
+                    fileData: data.secure_url,
+                    fileType: file.type,
                     timestamp: Date.now()
                 });
+                
+                // إخفاء الشريط بعد النجاح
+                setTimeout(() => {
+                    progressContainer.style.display = "none";
+                }, 1000);
+                console.log("✅ تم الرفع بنجاح!");
+            } else {
+                alert("فشل الرفع، تأكد من الإعدادات");
+                progressContainer.style.display = "none";
             }
-        })
-        .catch(err => alert("خطأ في الرفع، جرب فيديو أصغر"));
+        };
+
+        xhr.onerror = function() {
+            alert("حدث خطأ في الاتصال");
+            progressContainer.style.display = "none";
+        };
+
+        xhr.send(formData);
+
     } else {
-        chatRef.push({ text: text, fileData: null, fileType: "none" });
+        // نص فقط
+        chatRef.push({ text: text, fileData: null, fileType: "none", timestamp: Date.now() });
     }
+
     input.value = "";
     fileInput.value = "";
 }
@@ -211,7 +250,7 @@ function createMessageUI(text, fileData, fileType, key) {
     // بنضيف الزرار ثانياً عشان يروح أقصى الشمال
     msg.appendChild(delBtn);
 
-    
+
     chatBox.appendChild(msg);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
