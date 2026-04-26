@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Yonko Killua gaming hub. Streaming, programming, horror games and content creator.">
+
+<meta name="keywords" content="Yonko Killua, gaming, streamer, genshin impact, pubg, mobile legends">
+
+<meta name="author" content="Yonko Killua">
+
+<title>Yonko Killua</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<!-- AOS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Particles -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+
+    <!-- BACKGROUND EFFECTS -->
+    <div id="particles-js"></div>
+
+<!-- NAV -->
+<nav>
+    <h2 class="logo">⚡ Yonko Killua</h2>
+
+    
+
+    <div class="menu-toggle" id="menu-toggle" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</nav>
+    <ul class="desktop-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="request.html">Request To Play</a></li>
+        <li><a href="chat.html">Chat</a></li>
+        <li><a href="myportfolio.html">My Portfolio</a></li>
+    </ul>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="request.html">Request To Play</a>
+        <a href="chat.html">Chat</a>
+        <a href="myportfolio.html">My Portfolio</a>
+    </div>
+
+
+
+    
+
+  
+<!-- كارت 1 -->
+<div class="portfolio-card">
+
+    <img class="main-img" src="image/graf1.jpg">
+
+    
+
+    <button class="more-btn" onclick="toggleGallery(this)">More</button>
+
+    <div class="gallery">
+        <img src="image/g1.jpg.jpg" onclick="openImage(this)">
+        <img src="image/g2.jpg.jpg" onclick="openImage(this)">
+        <img src="image/g3.jpg.jpg" onclick="openImage(this)">
+        <img src="image/g4.jpg.jpg" onclick="openImage(this)">
+        <img src="image/g5.jpg.jpg" onclick="openImage(this)">
+        <img src="image/g6.jpg.jpg" onclick="openImage(this)">
+    </div>
+</div>
+
+
+<!-- كارت 2 -->
+<div class="portfolio-card">
+    <img class="main-img" src="image/web2.jpg">
+    
+    <button class="more-btn" onclick="toggleGallery(this)">More</button>
+
+    <div class="gallery">
+        <img src="image/wee3.jpg" onclick="openImage(this)">
+        <img src="image/wee1.jpg" onclick="openImage(this)">
+        <img src="image/wee2.jpg" onclick="openImage(this)">
+        <img src="image/wee4.jpg" onclick="openImage(this)">
+        <img src="image/wee5.jpg" onclick="openImage(this)">
+        <img src="image/wee6.jpg" onclick="openImage(this)">
+        
+    </div>
+</div>
+
+
+<!-- كارت 3 -->
+<div class="portfolio-card">
+    <img class="main-img" src="image/500q.jpg">
+    
+    <button class="more-btn" onclick="toggleGallery(this)">More</button>
+
+    <div class="gallery">
+        <img src="image/q1.jpg" onclick="openImage(this)">
+        <img src="image/q2.jpg" onclick="openImage(this)">
+    </div>
+</div>
+
+
+<!-- كارت 4 -->
+<div class="portfolio-card">
+    <img class="main-img" src="image/global1.jpg">
+    
+    <button class="more-btn" onclick="toggleGallery(this)">More</button>
+
+    <div class="gallery">
+        <img src="image/hana1.jpg" onclick="openImage(this)">
+        <img src="image/hana2.jpg" onclick="openImage(this)">
+        <img src="image/hana3.jpg" onclick="openImage(this)">
+        <img src="image/hana4.jpg" onclick="openImage(this)">
+    </div>
+</div>
+
+
+<!-- تكبير الصورة -->
+<div id="lightbox" onclick="closeImage()">
+    <img id="lightbox-img">
+</div>
+
+    <footer>
+    © 2026 Yonko Killua | Gaming Hub
+    </footer>
+
+
+    <script src="script.js"></script>
+
+<!-- AOS INIT -->
+<script>
+
+function toggleMenu() {
+    const menu = document.getElementById("mobileMenu");
+    if (menu) {
+        menu.classList.toggle("active");
+        console.log("تم الضغط والقائمة مفترض تظهر الآن");
+    } else {
+        console.error("المشكلة: العنصر mobileMenu غير موجود في الصفحة");
+    }
+}
+
+
+
+
+function toggleGallery(btn) {
+    const gallery = btn.nextElementSibling;
+    
+    if (gallery.style.display === "none" || gallery.style.display === "") {
+        gallery.style.display = "flex"; // لازم flex عشان الصور تترص بالعرض
+        btn.innerText = "Less";
+    } else {
+        gallery.style.display = "none";
+        btn.innerText = "More";
+    }
+}
+// دالة تكبير الصورة
+function openImage(img) {
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    
+    lightboxImg.src = img.src; // بياخد مسار الصورة اللي ضغطت عليها
+    lightbox.style.display = "flex"; // بيظهر الـ lightbox
+}
+
+// دالة إغلاق الصورة عند الضغط في أي مكان
+function closeImage() {
+    document.getElementById("lightbox").style.display = "none";
+}
+// بيخلي بكرة الماوس تقلب الصور بالعرض
+document.querySelectorAll('.gallery').forEach(el => {
+    el.addEventListener('wheel', (e) => {
+        if (e.deltaY != 0) {
+            e.preventDefault();
+            el.scrollLeft += e.deltaY;
+        }
+    });
+});
+</script>
+
+</body>
+</html>
