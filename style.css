@@ -38,6 +38,10 @@ body{
     font-weight: 800;
     font-size: 20px;
     margin: 0;
+    -webkit-user-select: none; /* لمتصفحات Chrome و Safari */
+    -moz-user-select: none;    /* لمتصفح Firefox */
+    -ms-user-select: none;     /* لمتصفح Internet Explorer/Edge */
+    user-select: none;         /* الخاصية الأساسية */
 }
 
 /* البار العلوي */
@@ -65,6 +69,7 @@ nav {
     gap: 5px;
     cursor: pointer;
     z-index: 5001; /* لضمان ظهوره فوق القائمة */
+
 }
 
 .menu-toggle div {
@@ -73,6 +78,7 @@ nav {
     background-color: #ff0033;
     transition: 0.3s;
     border-radius: 2px;
+    
 }
 
 /* تأثير التنوير (Hover) */
@@ -97,6 +103,10 @@ nav {
     z-index: 2500;
     border-left: 2px solid #ff0033;
     backdrop-filter: blur(15px);
+    -webkit-user-select: none; /* لمتصفحات Chrome و Safari */
+    -moz-user-select: none;    /* لمتصفح Firefox */
+    -ms-user-select: none;     /* لمتصفح Internet Explorer/Edge */
+    user-select: none;         /* الخاصية الأساسية */
 }
 
 .mobile-menu.active {
@@ -2183,6 +2193,28 @@ button:hover{
     padding:10px;
     border-bottom:1px solid #ff0033;
 }
+/* 1. تخصيص شكل المسطرة ككل */
+#chatBox::-webkit-scrollbar {
+    width: 8px; /* عرض السكرول بار الرأسي */
+}
+
+/* 2. الجزء اللي بيتحرك (المقبض) */
+#chatBox::-webkit-scrollbar-thumb {
+    background: #ff0033; /* اللون الأحمر بتاعك */
+    border-radius: 10px; /* عشان يبقى واخد شكل كبسولة ومريح للعين */
+    border: 2px solid #0a0a0a; /* بيعمل مسافة بسيطة حولين اللون عشان يبان احترافي */
+}
+
+/* 3. خلفية المسار اللي بيمشي فيه السكرول */
+#chatBox::-webkit-scrollbar-track {
+    background: #111; /* لون غامق يتماشى مع خلفية الشات */
+    border-radius: 10px;
+}
+
+/* 4. تغيير لون المقبض لما تلمسه بالماوس */
+#chatBox::-webkit-scrollbar-thumb:hover {
+    background: #cc0029; /* أحمر أغمق سنة عند الهوفر */
+} 
 
 .message {
     display: flex !important;
@@ -2605,4 +2637,272 @@ button:hover{
     font-size: 11px;
 }
 
+}
+
+/* الحاوية الكبيرة لكل الكروت عشان تضمن التوسيط */
+.portfolio-container {
+    max-width: 900px; /* بيخلي فيه مسافة يمين وشمال */
+    margin: 40px auto; /* بيوسط الحاوية في نص الصفحة */
+    padding: 0 20px; /* مسافة أمان إضافية للموبايل */
+}
+
+/* تنسيق الكارت */
+.portfolio-card {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 15px;
+    max-width: 60%; /* بيخلي فيه مسافة يمين وشمال */
+    margin: 40px auto; /* بيوسط الحاوية في نص الصفحة */
+    padding: 20px ; /* مسافة أمان إضافية للموبايل */
+    margin-bottom: 30px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* بيخلي كل حاجة (الكلمة والزرار) تبدأ من الشمال */
+    overflow: hidden;
+    z-index: 500;
+    -webkit-user-select: none; /* لمتصفحات Chrome و Safari */
+    -moz-user-select: none;    /* لمتصفح Firefox */
+    -ms-user-select: none;     /* لمتصفح Internet Explorer/Edge */
+    user-select: none;         /* الخاصية الأساسية */
+}
+
+
+/* لمنع سحب الصور بالماوس (Drag) */
+.portfolio-card img {
+    pointer-events: auto; /* عشان الضغط يفضل شغال للتكبير */
+    -webkit-user-drag: none; /* بيمنع المستخدم يشد الصورة لمكان تاني */
+}
+
+
+.portfolio-card:hover {
+    border-color: #ff0033; /* لمسة أحمر عند الهوفر */
+}
+
+.main-img {
+    width: 100%;
+    height: auto;
+    background-color: #111; /* بيدي خلفية سودة للصورة لو هي شفافة */
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    position: relative;
+    display: flex;
+    z-index: 500;
+}
+
+/* تنسيق الجاليري (الصور الإضافية) */
+.gallery {
+    display: none; /* 👈 يفضل مخفي تماماً في البداية */
+    gap: 15px;
+    margin-top: 15px;
+    padding: 15px;
+    background: #111;
+    border-radius: 10px;
+    position: relative;
+    z-index: 500;
+    
+    /* 👈 السطرين دول هما الحل */
+    width: 100%; 
+    overflow-x: scroll !important; /* تغيير من auto لـ scroll عشان المسطرة تبان دايماً */
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #333;
+}
+.gallery::-webkit-scrollbar {
+    height: 6px;
+}
+
+.gallery::-webkit-scrollbar-thumb {
+    background: #ff0033;
+    border-radius: 10px;
+}
+
+.gallery::-webkit-scrollbar-track {
+    background: #111;
+}
+
+/* عشان نضمن إن الصور تفضل جنب بعضها و "تزق" السكرول */
+.gallery img {
+    width: 200px; /* 👈 كبرت العرض شوية عشان السكرول يظهر بوضوح */
+    height: 130px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0; /* منع انكماش الصور */
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: 0.3s;
+    display: block; /* لضمان ثبات الأبعاد */
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+    border: 1px solid #ff0033;
+}
+
+/* زر More */
+.more-btn {
+    background: #ff0033;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    font-weight: bold;
+    align-self: flex-start; /* الزرار شمال */
+    transition: 0.3s;
+    position: relative;
+    display: flex;
+    z-index: 500;
+}
+
+/* Lightbox (شاشة التكبير) */
+#lightbox {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+#lightbox-img {
+    max-width: 90%;
+    max-height: 80%;
+    border: 2px solid #ff0033;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #ff0033;
+}
+
+
+@media (max-width: 768px){
+
+    /* الحاوية الرئيسية */
+    .portfolio-container{
+        max-width: 80%;
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    /* الكارد */
+    .portfolio-card{
+        max-width: 90%;   /* بدل 60% */
+        margin: 20px auto;
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+    /* الصورة الرئيسية */
+    .main-img{
+        height: auto;
+        max-height: 250px; /* تصغير مناسب للموبايل */
+        object-fit: cover;
+    }
+
+    /* زر المزيد */
+    .more-btn{
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+
+    /* الجاليري */
+    .gallery{
+        padding: 10px;
+        gap: 10px;
+    }
+
+    /* صور الجاليري */
+    .gallery img{
+        width: 140px;   /* أصغر للموبايل */
+        height: 90px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px){
+
+    /* الحاوية */
+    .portfolio-container{
+        max-width: 95%;
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    /* الكارد */
+    .portfolio-card{
+        max-width: 85%;   /* وسط الشاشة لكن مش صغير قوي */
+        margin: 25px auto;
+        padding: 18px;
+    }
+
+    /* الصورة الرئيسية */
+    .main-img{
+        height: auto;
+        max-height: 350px; /* مناسب للتابلت */
+        object-fit: cover;
+    }
+
+    /* زر المزيد */
+    .more-btn{
+        padding: 10px 22px;
+        font-size: 15px;
+    }
+
+    /* الجاليري */
+    .gallery{
+        padding: 12px;
+        gap: 12px;
+    }
+
+    /* الصور الصغيرة */
+    .gallery img{
+        width: 160px;
+        height: 110px;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px){
+
+    /* الحاوية */
+    .portfolio-container{
+        max-width: 90%;
+        margin: 35px auto;
+        padding: 0 20px;
+    }
+
+    /* الكارد */
+    .portfolio-card{
+        max-width: 80%;   /* أقرب للـ desktop */
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    /* الصورة الرئيسية */
+    .main-img{
+        max-height: 420px;
+        object-fit: cover;
+    }
+
+    /* زر المزيد */
+    .more-btn{
+        padding: 10px 24px;
+        font-size: 15px;
+    }
+
+    /* الجاليري */
+    .gallery{
+        padding: 15px;
+        gap: 15px;
+    }
+
+    /* صور الجاليري */
+    .gallery img{
+        width: 180px;
+        height: 120px;
+    }
 }
